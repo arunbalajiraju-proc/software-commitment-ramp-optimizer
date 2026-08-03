@@ -9,6 +9,8 @@ of possible adoption paths. It reports expected cost, P90 cost, conditional valu
 risk (CVaR), unused capacity, overage exposure, utilization, and the break-even price of
 commercial flexibility.
 
+**[Try the live application](https://software-commitment-ramp-optimizer-fc6bp9efudeeubwsdgnpo5.streamlit.app/)**
+
 ![Modelled option-cost comparison](docs/images/option_cost_comparison.png)
 
 > **Important:** the City of Toronto audit figures in this repository are public facts.
