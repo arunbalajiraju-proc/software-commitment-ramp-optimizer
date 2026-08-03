@@ -1,0 +1,5 @@
+option,expected_total_cost,median_total_cost,p90_total_cost,cvar_total_cost,risk_adjusted_cost,expected_unused_cost,expected_overage_cost,expected_unused_unit_months,expected_overage_unit_months,expected_utilization_pct,expected_overage_share_pct
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",8683518.34,8964971.88,10842062.68,11345607.09,9349040.53,388428.19,817759.85,25661.18,49113.29,95.68,9.04
+Illustrative quarterly ramp,9538295.22,9841200.44,11881251.8,12433789.63,10262168.82,597593.43,241619.25,36389.81,13375.59,93.83,2.46
+Illustrative monthly flexibility,10177279.8,10488900.98,12630122.71,13212541.53,10936095.23,483001.1,0.0,27058.88,0.0,95.25,0.0
+Published upfront commitment proxy,15575228.22,15422863.39,15921954.1,16225082.43,15737691.77,7811280.99,93766.94,547008.47,5969.38,49.75,1.1

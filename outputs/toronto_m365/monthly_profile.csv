@@ -1,0 +1,145 @@
+option,month,expected_demand,expected_commitment,expected_monthly_cost
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",1,2250.0,2250.0,34057.8
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",2,2273.18,2250.0,34443.81
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",3,2305.62,2250.0,34983.93
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",4,2351.04,2250.0,35740.09
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",5,2414.73,2250.0,36800.69
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",6,2504.11,2250.0,38288.85
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",7,2629.56,2893.02,43791.07
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",8,2805.41,2893.02,44053.51
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",9,3051.03,2893.02,47525.21
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",10,3392.15,2893.02,52888.85
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",11,3861.46,2893.02,60447.39
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",12,4497.87,2893.02,70836.4
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",13,5342.88,5877.67,88969.18
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",14,6432.37,5877.67,98719.21
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",15,7783.24,5877.67,120826.46
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",16,9378.76,5877.67,147297.11
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",17,11161.99,5877.67,176963.65
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",18,13047.03,5877.67,208343.86
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",19,14945.93,16441.05,248864.85
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",20,16794.35,16441.05,255220.02
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",21,18559.17,16441.05,284132.62
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",22,20228.47,16441.05,311927.23
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",23,21796.0,16441.05,338027.4
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",24,23250.58,16441.05,362246.86
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",25,24574.39,27032.34,409183.09
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",26,25747.67,27032.34,413082.88
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",27,26755.59,27032.34,425459.85
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",28,27593.21,27032.34,437193.79
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",29,28267.06,27032.34,446970.65
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",30,28793.21,27032.34,454735.4
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",31,29193.51,32113.38,486093.76
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",32,29491.68,32113.38,486093.76
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",33,29710.15,32113.38,486354.17
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",34,29868.35,32113.38,487024.57
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",35,29981.96,32113.38,487691.85
+"Optimized: 7.5% initial, 6-month review, true-up only, 10% buffer",36,30063.12,32113.38,488238.52
+Illustrative quarterly ramp,1,2250.0,2250.0,36949.5
+Illustrative quarterly ramp,2,2273.18,2250.0,37368.28
+Illustrative quarterly ramp,3,2305.62,2250.0,37954.27
+Illustrative quarterly ramp,4,2351.04,2586.62,42477.47
+Illustrative quarterly ramp,5,2414.73,2586.62,42481.2
+Illustrative quarterly ramp,6,2504.11,2586.62,42973.73
+Illustrative quarterly ramp,7,2629.56,2893.02,47509.17
+Illustrative quarterly ramp,8,2805.41,2893.02,47793.9
+Illustrative quarterly ramp,9,3051.03,2893.02,51560.37
+Illustrative quarterly ramp,10,3392.15,3731.86,61284.6
+Illustrative quarterly ramp,11,3861.46,3731.86,64816.18
+Illustrative quarterly ramp,12,4497.87,3731.86,75726.11
+Illustrative quarterly ramp,13,5342.88,5877.67,96523.17
+Illustrative quarterly ramp,14,6432.37,5877.67,107101.03
+Illustrative quarterly ramp,15,7783.24,5877.67,131085.31
+Illustrative quarterly ramp,16,9378.76,10317.17,169428.62
+Illustrative quarterly ramp,17,11161.99,10317.17,184796.24
+Illustrative quarterly ramp,18,13047.03,10317.17,218748.55
+Illustrative quarterly ramp,19,14945.93,16441.05,269994.88
+Illustrative quarterly ramp,20,16794.35,16441.05,276889.64
+Illustrative quarterly ramp,21,18559.17,16441.05,308257.09
+Illustrative quarterly ramp,22,20228.47,22251.85,365419.87
+Illustrative quarterly ramp,23,21796.0,22251.85,373541.0
+Illustrative quarterly ramp,24,23250.58,22251.85,392092.98
+Illustrative quarterly ramp,25,24574.39,27032.34,443925.05
+Illustrative quarterly ramp,26,25747.67,27032.34,448155.95
+Illustrative quarterly ramp,27,26755.59,27032.34,461583.79
+Illustrative quarterly ramp,28,27593.21,30353.04,498457.63
+Illustrative quarterly ramp,29,28267.06,30353.04,499124.11
+Illustrative quarterly ramp,30,28793.21,30353.04,503226.94
+Illustrative quarterly ramp,31,29193.51,32113.38,527365.87
+Illustrative quarterly ramp,32,29491.68,32113.38,527365.87
+Illustrative quarterly ramp,33,29710.15,32113.38,527648.39
+Illustrative quarterly ramp,34,29868.35,32855.69,539556.13
+Illustrative quarterly ramp,35,29981.96,32855.69,539556.13
+Illustrative quarterly ramp,36,30063.12,32855.69,539556.13
+Illustrative monthly flexibility,1,2250.0,2250.0,40162.5
+Illustrative monthly flexibility,2,2273.18,2387.29,42613.12
+Illustrative monthly flexibility,3,2305.62,2421.34,43220.96
+Illustrative monthly flexibility,4,2351.04,2469.04,44072.28
+Illustrative monthly flexibility,5,2414.73,2535.93,45266.29
+Illustrative monthly flexibility,6,2504.11,2629.78,46941.57
+Illustrative monthly flexibility,7,2629.56,2761.52,49293.07
+Illustrative monthly flexibility,8,2805.41,2946.16,52589.03
+Illustrative monthly flexibility,9,3051.03,3204.05,57192.35
+Illustrative monthly flexibility,10,3392.15,3562.23,63585.8
+Illustrative monthly flexibility,11,3861.46,4055.0,72381.78
+Illustrative monthly flexibility,12,4497.87,4723.23,84309.57
+Illustrative monthly flexibility,13,5342.88,5610.51,100147.51
+Illustrative monthly flexibility,14,6432.37,6754.46,120567.07
+Illustrative monthly flexibility,15,7783.24,8172.88,145885.93
+Illustrative monthly flexibility,16,9378.76,9848.18,175790.01
+Illustrative monthly flexibility,17,11161.99,11720.57,209212.1
+Illustrative monthly flexibility,18,13047.03,13699.85,244542.26
+Illustrative monthly flexibility,19,14945.93,15693.72,280132.85
+Illustrative monthly flexibility,20,16794.35,17634.55,314776.66
+Illustrative monthly flexibility,21,18559.17,19487.6,347853.62
+Illustrative monthly flexibility,22,20228.47,21240.37,379140.63
+Illustrative monthly flexibility,23,21796.0,22886.28,408520.05
+Illustrative monthly flexibility,24,23250.58,24413.59,435782.53
+Illustrative monthly flexibility,25,24574.39,25803.58,460593.87
+Illustrative monthly flexibility,26,25747.67,27035.53,482584.23
+Illustrative monthly flexibility,27,26755.59,28093.84,501475.12
+Illustrative monthly flexibility,28,27593.21,28973.34,517174.05
+Illustrative monthly flexibility,29,28267.06,29680.88,529803.73
+Illustrative monthly flexibility,30,28793.21,30233.36,539665.41
+Illustrative monthly flexibility,31,29193.51,30653.67,547168.1
+Illustrative monthly flexibility,32,29491.68,30966.75,552756.42
+Illustrative monthly flexibility,33,29710.15,31196.14,556851.11
+Illustrative monthly flexibility,34,29868.35,31362.25,559816.23
+Illustrative monthly flexibility,35,29981.96,31481.54,561945.47
+Illustrative monthly flexibility,36,30063.12,31566.75,563466.52
+Published upfront commitment proxy,1,2250.0,30000.0,428400.0
+Published upfront commitment proxy,2,2273.18,30000.0,428400.0
+Published upfront commitment proxy,3,2305.62,30000.0,428400.0
+Published upfront commitment proxy,4,2351.04,30000.0,428400.0
+Published upfront commitment proxy,5,2414.73,30000.0,428400.0
+Published upfront commitment proxy,6,2504.11,30000.0,428400.0
+Published upfront commitment proxy,7,2629.56,30000.0,428400.0
+Published upfront commitment proxy,8,2805.41,30000.0,428400.0
+Published upfront commitment proxy,9,3051.03,30000.0,428400.0
+Published upfront commitment proxy,10,3392.15,30000.0,428400.0
+Published upfront commitment proxy,11,3861.46,30000.0,428400.0
+Published upfront commitment proxy,12,4497.87,30000.0,428400.0
+Published upfront commitment proxy,13,5342.88,30000.0,428400.0
+Published upfront commitment proxy,14,6432.37,30000.0,428400.0
+Published upfront commitment proxy,15,7783.24,30000.0,428400.0
+Published upfront commitment proxy,16,9378.76,30000.0,428400.0
+Published upfront commitment proxy,17,11161.99,30000.0,428400.0
+Published upfront commitment proxy,18,13047.03,30000.0,428400.0
+Published upfront commitment proxy,19,14945.93,30000.0,428400.0
+Published upfront commitment proxy,20,16794.35,30000.0,428406.35
+Published upfront commitment proxy,21,18559.17,30000.0,428640.74
+Published upfront commitment proxy,22,20228.47,30000.0,429471.88
+Published upfront commitment proxy,23,21796.0,30000.0,430812.51
+Published upfront commitment proxy,24,23250.58,30000.0,432312.51
+Published upfront commitment proxy,25,24574.39,30344.66,433321.77
+Published upfront commitment proxy,26,25747.67,30344.66,434663.51
+Published upfront commitment proxy,27,26755.59,30344.66,435920.18
+Published upfront commitment proxy,28,27593.21,30344.66,437230.98
+Published upfront commitment proxy,29,28267.06,30344.66,438520.16
+Published upfront commitment proxy,30,28793.21,30344.66,439956.07
+Published upfront commitment proxy,31,29193.51,30344.66,441471.02
+Published upfront commitment proxy,32,29491.68,30344.66,442841.98
+Published upfront commitment proxy,33,29710.15,30344.66,444114.88
+Published upfront commitment proxy,34,29868.35,30344.66,445178.77
+Published upfront commitment proxy,35,29981.96,30344.66,446046.16
+Published upfront commitment proxy,36,30063.12,30344.66,446718.74

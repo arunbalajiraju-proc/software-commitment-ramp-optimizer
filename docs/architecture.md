@@ -1,0 +1,158 @@
+# Architecture
+
+## Design goal
+
+The optimizer is deliberately small, inspectable, and deterministic when given the same
+seed. A sourcing analyst should be able to trace a result from evidence, through an
+assumption, into a monthly cash flow and an optimization decision.
+
+```mermaid
+flowchart TD
+    A["Public facts and user assumptions"] --> B["Demand scenarios"]
+    B --> C["Monthly commercial simulation"]
+    C --> D["Risk metrics and guardrails"]
+    D --> E["Policy ranking and break-even"]
+```
+
+## 1. Evidence boundary and case loader
+
+`case_loader.py` reads a JSON case into typed, immutable models. The Toronto package uses
+three evidence classes:
+
+| Evidence class | Meaning | Example |
+|---|---|---|
+| `published_audit` | Directly reported by an official public source | 7.5% M365 deployment at the end of Year 1 |
+| `derived_from_published_audit` | Transparent arithmetic from a published figure | CAD 14.28 per licence-equivalent month |
+| `illustrative_counterfactual` | A user-controlled scenario, not an observed term | 15% premium for quarterly activation |
+
+The distinction matters because a counterfactual can illuminate a decision without
+pretending to reconstruct a confidential contract.
+
+## 2. Adoption forecast
+
+`forecast.py` creates a monotonic logistic adoption curve and normalizes it so that:
+
+- month zero equals the configured active population;
+- the final month reaches the scenario-specific demand target; and
+- adoption never falls between months.
+
+For each Monte Carlo path, the engine independently varies:
+
+- ultimate demand using a normal multiplier;
+- rollout speed using a normal multiplier; and
+- rollout delay using a Bernoulli event followed by a triangular delay distribution.
+
+The triangular distribution is useful when a project team can estimate the earliest,
+most likely, and latest delay but does not have enough historical data to fit a richer
+distribution. The random-number generator is seeded for reproducibility.
+
+## 3. Commercial-option model
+
+`models.py` defines a `CommercialOption`. Each option supports:
+
+- one or more volume-price tiers;
+- initial commitment as a share of planned target;
+- a hard minimum-commitment floor;
+- monthly, quarterly, semiannual, annual, or other review cadence;
+- true-up-only or true-up/true-down behavior;
+- a capacity buffer above active demand at review;
+- emergency-overage pricing;
+- a price multiplier representing the cost of flexibility;
+- one-time and monthly fixed fees; and
+- annual escalation.
+
+Terms are expressed as data rather than code so analysts can replace illustrative inputs
+with actual supplier bids.
+
+## 4. Monthly pricing engine
+
+`pricing.py` evaluates one demand path month by month.
+
+At inception:
+
+```text
+commitment = max(minimum floor, planned target × initial commitment percentage)
+```
+
+At each review date:
+
+```text
+requested capacity = active demand × (1 + buffer)
+```
+
+A true-up-only policy can increase but not decrease its committed baseline. A true-down
+policy can reset the baseline to the requested quantity, subject to its floor. Demand
+above commitment between reviews is recorded as overage and billed at the configured
+overage multiplier.
+
+For month `t`:
+
+```text
+monthly cost = commitment × unit price
+             + overage units × unit price × overage multiplier
+             + fixed monthly fee
+```
+
+Unused cost represents committed units above active demand multiplied by their price.
+It excludes qualitative value, option value, and bundle benefits that the model cannot
+observe.
+
+## 5. Monte Carlo and risk metrics
+
+`simulation.py` applies every commercial option to every demand path. It returns:
+
+- expected and median total cost;
+- P90 total cost;
+- 90% conditional value at risk (the average of the costliest 10% of paths);
+- expected unused and overage costs;
+- unused and overage unit-months; and
+- expected utilization.
+
+The default decision objective is:
+
+```text
+risk-adjusted cost = expected cost
+                   + 0.25 × (CVaR90 − expected cost)
+```
+
+The 0.25 weight is a policy choice, not a statistical truth. A risk-neutral buyer can set
+it to zero; a buyer with strong budget-protection requirements can increase it.
+
+## 6. Policy optimizer
+
+`optimizer.py` performs an explicit grid search. The default grid tests combinations of:
+
+- 10 initial-commitment percentages;
+- four buffer percentages;
+- four review frequencies; and
+- true-up-only versus true-down.
+
+For the Toronto template, duplicate grid points below the 7.5% floor are skipped, leaving
+288 evaluated candidates. More frequent review and true-down rights receive explicit,
+editable price premiums.
+
+The default feasibility guardrail rejects any candidate expected to source more than 10%
+of consumed unit-months as emergency overage. This prevents a superficially cheap policy
+from “winning” by treating ordinary demand as exceptions. The guardrail is visible and
+editable because organizations differ in tolerance for compliance and operational risk.
+
+## 7. Break-even analysis
+
+`analysis.py` uses binary search to answer:
+
+> How large could the unit-price premium for the flexible structure become before its
+> risk-adjusted cost equals the locked alternative?
+
+This is more useful in negotiation than a point estimate. If a supplier's quoted premium
+is below the boundary, flexibility has modeled economic room; if it is above, the buyer
+must justify the term using value not captured by the model or choose another structure.
+
+## 8. Reporting and interface
+
+`reporting.py` writes machine-readable and human-readable outputs. `app.py` exposes the
+same engine through an editable Streamlit dashboard. No result depends on a proprietary
+API or large language model.
+
+The interface intentionally displays the evidence boundary before the result. Exports
+carry a notice that outputs are modelled rather than realized.
+
