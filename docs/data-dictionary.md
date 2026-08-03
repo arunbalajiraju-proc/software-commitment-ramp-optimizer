@@ -9,6 +9,7 @@
 | `initial_active_units` | integer | Active users or licence-equivalent units at month zero |
 | `midpoint_month` | number | Month where the unnormalized logistic curve crosses its midpoint |
 | `growth_rate` | number | Steepness of the adoption curve |
+| `rollout_complete_month` | integer or null | Month when the guided curve reaches target and begins its plateau; null retains end-of-horizon behavior |
 | `delay_probability` | proportion | Probability that a material rollout delay occurs |
 | `delay_min_months` | number | Earliest delay in the triangular distribution |
 | `delay_mode_months` | number | Most likely delay in the triangular distribution |

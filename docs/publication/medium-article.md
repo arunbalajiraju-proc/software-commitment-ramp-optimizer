@@ -92,6 +92,12 @@ Before signature, a buyer typically has at least five imperfect inputs:
 4. supplier pricing for one or more commitment levels; and
 5. possible flexibility terms, even if they carry a premium.
 
+The interface does not ask the buyer to translate those facts into Monte Carlo or CVaR
+parameters. It asks seven plain-language questions: total need, day-one need, unit price,
+contract term, rollout completion, rollout confidence, and planning posture. A
+translation layer maps those answers into the numerical model and converts the result
+back into a buying schedule and negotiation position.
+
 The buyer rarely knows one “correct” deployment forecast. What it can know is a range:
 earliest, most likely, and latest readiness; possible final demand; and how fast adoption
 might grow after a delay.
@@ -147,8 +153,9 @@ known, calculated, assumed, and user-entered.
 ### 2. Adoption forecast
 
 The forecast engine builds a smooth logistic rollout between an initial active population
-and a final target. It is normalized so that month zero and the final month match the
-configured endpoints.
+and a final target. It is normalized so that month zero matches the day-one population,
+the target is reached at the configured rollout-completion month, and demand holds at
+that level for the remainder of the contract.
 
 Each Monte Carlo scenario varies three things:
 
@@ -218,8 +225,9 @@ risk-adjusted cost = expected cost
 ```
 
 The 0.25 is not a universal truth. It says this example gives some, but not dominant,
-weight to costly tail outcomes. The dashboard lets the user set the weight to zero for a
-risk-neutral comparison or raise it when budget protection matters more.
+weight to costly tail outcomes. The guided interface asks whether the organization is
+cost focused, balanced, or conservative and maps that answer to documented risk and
+overage settings. Advanced users can still inspect the underlying metrics.
 
 ### 7. Policy optimizer
 
@@ -253,13 +261,22 @@ what a supplier will quote.
 
 ### 9. Dashboard and exports
 
-The Streamlit interface lets a user edit demand uncertainty, commercial options, risk
-weight, and overage guardrail. It presents public evidence before model output, shows the
-demand-to-commitment ramp, and exports:
+The Streamlit interface is designed as a procurement planner rather than a model console.
+The primary screen asks for information that procurement, software asset management, and
+the project team can reasonably provide. It returns:
 
-- an option summary CSV;
-- a monthly profile CSV; and
-- detailed JSON containing assumptions and results.
+- the number of licence units to order at contract start;
+- the usage-review cadence and phase-by-phase expected buying schedule;
+- the formula to use when actual usage replaces the forecast at each review;
+- a financial comparison with full upfront commitment;
+- the maximum modelled price premium to consider for flexibility;
+- supplier terms to request and actions to complete before issuing the purchase order;
+- a downloadable Markdown procurement plan; and
+- detailed JSON for reviewers who need the assumptions and model outputs.
+
+CVaR, candidate counts, and other technical diagnostics remain available in an advanced
+section. The Toronto evidence sits in a separate tab so the public facts are not confused
+with user-entered commercial assumptions.
 
 The command-line interface creates the same reproducible result bundle for peer review or
 version control.
@@ -443,12 +460,12 @@ The full project is available at:
 
 ```text
 software-commitment-ramp-optimizer/
-├── app.py                         # Streamlit decision dashboard
+├── app.py                         # Guided Streamlit procurement planner
 ├── case_studies/toronto/          # Audit facts, sources, and case inputs
 ├── docs/                          # Architecture, methodology, guides, article
 ├── outputs/toronto_m365/          # Reproducible CSV, JSON, and Markdown results
 ├── scripts/generate_charts.py     # Static publication charts
-├── src/commitment_optimizer/      # Core model and command-line package
+├── src/commitment_optimizer/      # Planner translation layer and numerical engine
 └── tests/                         # Unit and audit-reconciliation tests
 ```
 
@@ -489,7 +506,7 @@ The current version proves the decision model. A production sourcing product wou
 - correlations between delay, final demand, and adoption speed;
 - termination, transfer, and renewal options;
 - multi-year net-present-value and foreign-exchange treatment;
-- clause templates that translate a selected policy into negotiation language; and
+- a deeper clause library tied to supplier-specific order-form language; and
 - scenario governance showing who approved each assumption and when.
 
 An AI layer could help extract candidate terms from proposals and order forms, but it

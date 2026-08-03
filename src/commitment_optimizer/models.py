@@ -29,6 +29,7 @@ class ForecastConfig:
     initial_active_units: int
     midpoint_month: float
     growth_rate: float
+    rollout_complete_month: int | None = None
     delay_probability: float = 0.0
     delay_min_months: float = 0.0
     delay_mode_months: float = 0.0
@@ -47,6 +48,19 @@ class ForecastConfig:
             raise ValueError("initial_active_units must be between 0 and target_units")
         if self.growth_rate <= 0:
             raise ValueError("growth_rate must be positive")
+        if self.rollout_complete_month is not None and not (
+            1 <= self.rollout_complete_month <= self.horizon_months
+        ):
+            raise ValueError(
+                "rollout_complete_month must be between 1 and horizon_months"
+            )
+        if (
+            self.rollout_complete_month == 1
+            and self.initial_active_units < self.target_units
+        ):
+            raise ValueError(
+                "rollout_complete_month must be at least 2 when rollout is incomplete"
+            )
         if not 0 <= self.delay_probability <= 1:
             raise ValueError("delay_probability must be between 0 and 1")
         if not (

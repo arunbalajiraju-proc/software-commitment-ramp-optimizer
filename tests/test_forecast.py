@@ -40,6 +40,21 @@ class ForecastTests(unittest.TestCase):
         self.assertEqual(first.shape, (100, 24))
         self.assertTrue(np.all(np.diff(first, axis=1) >= 0))
 
+    def test_guided_rollout_reaches_target_and_then_holds(self) -> None:
+        guided = ForecastConfig(
+            horizon_months=24,
+            target_units=1_000,
+            initial_active_units=100,
+            midpoint_month=5.5,
+            growth_rate=0.5,
+            rollout_complete_month=12,
+            simulations=1,
+        )
+        curve = deterministic_adoption_curve(guided)
+        self.assertEqual(curve[0], 100)
+        self.assertEqual(curve[11], 1_000)
+        np.testing.assert_array_equal(curve[11:], np.full(13, 1_000))
+
 
 if __name__ == "__main__":
     unittest.main()

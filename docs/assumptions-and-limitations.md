@@ -39,9 +39,9 @@
 - Unused capacity can carry option value, disaster-recovery value, or bundle benefits not
   captured in utilization.
 - A seeded Monte Carlo run is reproducible but not necessarily accurate.
-- Risk-adjusted cost depends on a user-selected risk weight and CVaR confidence level.
+- Risk-adjusted cost depends on the guided risk posture or programmatic risk weight and
+  CVaR confidence level.
 - The overage guardrail is a policy choice and should be tailored to compliance needs.
 
 The tool is decision support for professional review. It is not legal, accounting,
 financial, or procurement advice and does not certify contract compliance.
-

@@ -8,11 +8,18 @@ assumption, into a monthly cash flow and an optimization decision.
 
 ```mermaid
 flowchart TD
-    A["Public facts and user assumptions"] --> B["Demand scenarios"]
-    B --> C["Monthly commercial simulation"]
-    C --> D["Risk metrics and guardrails"]
-    D --> E["Policy ranking and break-even"]
+    A["Seven buyer-facing inputs"] --> B["Planner translation layer"]
+    B --> C["Demand scenarios"]
+    C --> D["Monthly commercial simulation"]
+    D --> E["Risk metrics and guardrails"]
+    E --> F["Policy ranking and break-even"]
+    F --> G["Buying schedule and negotiation plan"]
 ```
+
+`planner.py` is the product-facing translation layer. It maps total demand, day-one
+need, unit price, contract term, rollout completion, confidence, and risk posture into
+the typed model configuration. It also converts the selected policy back into a review
+schedule and procurement memo. The numerical engine remains independent of Streamlit.
 
 ## 1. Evidence boundary and case loader
 
@@ -33,8 +40,12 @@ pretending to reconstruct a confidential contract.
 `forecast.py` creates a monotonic logistic adoption curve and normalizes it so that:
 
 - month zero equals the configured active population;
-- the final month reaches the scenario-specific demand target; and
+- the configured rollout-completion month reaches the scenario-specific demand target;
+- demand holds at that target after rollout completion; and
 - adoption never falls between months.
+
+Legacy case files that do not specify a rollout-completion month retain the original
+behavior and reach their target at the end of the model horizon.
 
 For each Monte Carlo path, the engine independently varies:
 
@@ -115,8 +126,9 @@ risk-adjusted cost = expected cost
                    + 0.25 × (CVaR90 − expected cost)
 ```
 
-The 0.25 weight is a policy choice, not a statistical truth. A risk-neutral buyer can set
-it to zero; a buyer with strong budget-protection requirements can increase it.
+The 0.25 weight is a policy choice, not a statistical truth. The guided planner maps
+plain-language cost-focused, balanced, and conservative postures to documented risk and
+overage settings. Programmatic users can still set the numerical values directly.
 
 ## 6. Policy optimizer
 
@@ -149,10 +161,11 @@ must justify the term using value not captured by the model or choose another st
 
 ## 8. Reporting and interface
 
-`reporting.py` writes machine-readable and human-readable outputs. `app.py` exposes the
-same engine through an editable Streamlit dashboard. No result depends on a proprietary
-API or large language model.
+`reporting.py` writes the reproducible case-study bundle. `planner.py` produces the
+buyer-facing review schedule and procurement memo, while `app.py` exposes that workflow
+through Streamlit. No result depends on a proprietary API or large language model.
 
-The interface intentionally displays the evidence boundary before the result. Exports
+The interface puts the recommendation first and keeps CVaR, candidate counts, and other
+model diagnostics in an advanced section. The public Toronto evidence remains a separate
+tab so modelled counterfactuals are not presented as disclosed contract terms. Exports
 carry a notice that outputs are modelled rather than realized.
-

@@ -3,13 +3,16 @@
 A transparent, pre-award decision tool for sourcing teams deciding how much software
 capacity to commit before deployment readiness and adoption are certain.
 
+The guided planner asks seven business questions and returns an initial order, quantity
+review cadence, phase-by-phase buying schedule, flexibility-price ceiling, supplier terms
+to request, and a downloadable procurement plan. Technical simulation controls remain
+available only as optional assumptions.
+
 The tool compares upfront commitments, staged activation ramps, true-up/true-down
 rights, review cadence, buffers, fees, escalation, and overage pricing across thousands
 of possible adoption paths. It reports expected cost, P90 cost, conditional value at
 risk (CVaR), unused capacity, overage exposure, utilization, and the break-even price of
 commercial flexibility.
-
-**[Try the live application](https://software-commitment-ramp-optimizer-fc6bp9efudeeubwsdgnpo5.streamlit.app/)**
 
 ![Modelled option-cost comparison](docs/images/option_cost_comparison.png)
 
@@ -95,6 +98,11 @@ Run the interactive dashboard:
 streamlit run app.py
 ```
 
+In the app, replace the example values with your planned population, day-one need,
+supplier price, contract term, expected rollout completion, and rollout confidence. The
+primary output tells you what to order at contract start, when to review usage, how to
+phase later orders, and what commercial protections to request.
+
 Reproduce the Toronto publication run:
 
 ```bash
@@ -115,6 +123,7 @@ python -m ruff check .
 
 | Component | What it does | Main file |
 |---|---|---|
+| Guided planner | Translates plain-language procurement inputs into validated forecast, pricing, and risk settings | `planner.py` |
 | Evidence boundary | Loads public facts separately from assumptions and hypothetical terms | `case_loader.py` |
 | Adoption forecast | Creates seeded logistic rollout paths with demand, speed, and delay uncertainty | `forecast.py` |
 | Commercial engine | Applies floors, review dates, buffers, true-down rules, overage, fees, and escalation monthly | `pricing.py` |
@@ -122,7 +131,7 @@ python -m ruff check .
 | Policy optimizer | Grid-searches auditable combinations and enforces an overage feasibility guardrail | `optimizer.py` |
 | Break-even analysis | Finds the maximum flexibility premium that preserves a risk-adjusted advantage | `analysis.py` |
 | Exports | Writes summary CSV, monthly profiles, detailed JSON, and a Markdown result card | `reporting.py` |
-| User interface | Provides editable assumptions, option comparison, charts, evidence, and downloads | `app.py` |
+| User interface | Guides the buyer from seven inputs to a buying schedule, pricing boundary, negotiation terms, and downloads | `app.py` |
 
 Read [the architecture](docs/architecture.md), [methodology](docs/methodology.md),
 [data dictionary](docs/data-dictionary.md), [interpretation guide](docs/interpretation-guide.md),
@@ -137,7 +146,7 @@ software-commitment-ramp-optimizer/
 ├── docs/                          # Architecture, method, guides, article, charts
 ├── outputs/toronto_m365/          # Reproducible model results
 ├── scripts/generate_charts.py     # Publication chart build
-├── src/commitment_optimizer/      # Forecast, pricing, simulation, optimization
+├── src/commitment_optimizer/      # Guided planner, forecast, pricing, simulation, optimization
 └── tests/                         # Unit and public-arithmetic reconciliation tests
 ```
 
@@ -148,8 +157,10 @@ reviewable by procurement, finance, IT, security, implementation, and legal team
 does not replace supplier quotes, contract review, architecture analysis, or a validated
 deployment plan.
 
+See the [guided user guide](docs/user-guide.md) for the exact inputs, owners, output
+definitions, and recommended sourcing workflow.
+
 ## Licence and attribution
 
 Code is released under the [MIT License](LICENSE). Public-source data retains its source
 attribution. If you use the model in research, see [`CITATION.cff`](CITATION.cff).
-

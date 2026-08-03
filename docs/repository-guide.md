@@ -2,7 +2,8 @@
 
 ## Where to start
 
-- Product user: run `streamlit run app.py` and read the interpretation tab.
+- Product user: run `streamlit run app.py`, answer the seven guided questions, and
+  download the procurement plan.
 - Sourcing analyst: copy the Toronto JSON, replace facts and options, and retain the
   evidence classes.
 - Research reviewer: begin with `methodology.md`, the checked-in outputs, and tests.
@@ -13,7 +14,8 @@
 
 | Path | Responsibility |
 |---|---|
-| `app.py` | Interactive model controls, results, charts, and downloads |
+| `app.py` | Guided procurement inputs, recommendation, charts, and downloads |
+| `src/commitment_optimizer/planner.py` | Buyer-input translation, plan orchestration, schedule, and procurement memo |
 | `src/commitment_optimizer/models.py` | Validated domain objects |
 | `src/commitment_optimizer/case_loader.py` | JSON-to-domain loading and evidence metadata |
 | `src/commitment_optimizer/forecast.py` | Deterministic curve and stochastic paths |
@@ -57,6 +59,6 @@ python scripts/generate_charts.py
 python -m pytest
 ```
 
-The CLI run is deterministic because the case fixes its seed. A dashboard run may differ
-if the user changes its scenario count or assumptions.
-
+The CLI run is deterministic because the case fixes its seed. The guided planner is also
+reproducible when its inputs, optional assumptions, scenario count, and seed are held
+constant.

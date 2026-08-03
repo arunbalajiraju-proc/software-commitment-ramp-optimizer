@@ -13,6 +13,7 @@ def deterministic_adoption_curve(
     target_units: float | None = None,
     midpoint_month: float | None = None,
     growth_rate: float | None = None,
+    rollout_complete_month: int | None = None,
 ) -> np.ndarray:
     """Create a smooth, non-decreasing logistic adoption path.
 
@@ -26,12 +27,28 @@ def deterministic_adoption_curve(
     midpoint = config.midpoint_month if midpoint_month is None else midpoint_month
     rate = config.growth_rate if growth_rate is None else growth_rate
 
+    configured_completion = (
+        config.rollout_complete_month
+        if rollout_complete_month is None
+        else rollout_complete_month
+    )
+    completion_index = (
+        config.horizon_months - 1
+        if configured_completion is None
+        else max(0, min(config.horizon_months - 1, configured_completion - 1))
+    )
+
     months = np.arange(config.horizon_months, dtype=float)
-    raw = 1.0 / (1.0 + np.exp(-rate * (months - midpoint)))
+    rollout_months = np.minimum(months, float(completion_index))
+    raw = 1.0 / (1.0 + np.exp(-rate * (rollout_months - midpoint)))
     raw_start = raw[0]
-    raw_end = raw[-1]
+    raw_end = raw[completion_index]
     if np.isclose(raw_start, raw_end):
-        normalized = np.linspace(0.0, 1.0, config.horizon_months)
+        normalized = np.ones(config.horizon_months)
+        if completion_index > 0:
+            normalized[: completion_index + 1] = np.linspace(
+                0.0, 1.0, completion_index + 1
+            )
     else:
         normalized = np.clip((raw - raw_start) / (raw_end - raw_start), 0.0, 1.0)
 
@@ -85,6 +102,14 @@ def generate_demand_scenarios(config: ForecastConfig) -> np.ndarray:
             target_units=scenario_target,
             midpoint_month=config.midpoint_month + delay,
             growth_rate=scenario_growth,
+            rollout_complete_month=(
+                None
+                if config.rollout_complete_month is None
+                else min(
+                    config.horizon_months,
+                    config.rollout_complete_month + int(round(delay)),
+                )
+            ),
         )
 
     return scenarios

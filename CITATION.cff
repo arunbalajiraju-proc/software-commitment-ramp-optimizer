@@ -5,7 +5,7 @@ type: software
 authors:
   - family-names: "Raju"
     given-names: "Arun Balaji"
-version: 0.1.0
+version: 0.2.0
 date-released: 2026-08-01
 url: "https://github.com/arunbalajiraju-proc/software-commitment-ramp-optimizer"
 repository-code: "https://github.com/arunbalajiraju-proc/software-commitment-ramp-optimizer"
@@ -16,4 +16,3 @@ keywords:
   - software licensing
   - Monte Carlo simulation
   - decision support
-
