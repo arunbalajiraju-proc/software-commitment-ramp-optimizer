@@ -1,12 +1,21 @@
 # Software Commitment & Ramp Optimizer
 
-A transparent, pre-award decision tool for sourcing teams deciding how much software
-capacity to commit before deployment readiness and adoption are certain.
+A transparent software-commitment decision and control workflow for sourcing teams,
+project owners, finance, architecture, and software asset management.
 
-The guided planner asks seven business questions and returns an initial order, quantity
-review cadence, phase-by-phase buying schedule, flexibility-price ceiling, supplier terms
-to request, and a downloadable procurement plan. Technical simulation controls remain
-available only as optional assumptions.
+The application now covers three connected decisions:
+
+1. **Plan and approve:** test demand, delivery, architecture, dependency, pilot, and
+   usage-reporting evidence before a large commitment is approved.
+2. **Compare supplier offers:** evaluate actual full and phased commercial structures
+   against the same seeded demand scenarios.
+3. **Control post-award usage:** turn active use, inactive assignments, contractual
+   true-down rights, and price into a reclaim, freeze, true-up, or true-down action.
+
+It returns a hold/proceed gate, modelled initial order, review cadence, phase-by-phase
+buying schedule, P90 budget, flexibility-price ceiling, supplier pricing template,
+contract controls, and downloadable decision record. Technical simulation controls
+remain optional.
 
 The tool compares upfront commitments, staged activation ramps, true-up/true-down
 rights, review cadence, buffers, fees, escalation, and overage pricing across thousands
@@ -58,6 +67,32 @@ See [the evidence file](case_studies/toronto/audit_facts.csv),
 [source notes](case_studies/toronto/SOURCES.md), and
 [case documentation](case_studies/toronto/README.md).
 
+### Would this tool have prevented the Toronto M365 unused cost?
+
+It could not have guaranteed that result, because the confidential agreement, supplier
+concessions, implementation forecast, and internal approvals are not public. It would,
+however, have produced a clear **hold-full-commitment** decision if the public facts had
+been entered honestly:
+
+- the audit said the network was estimated to support only 6,000 users while the
+  agreement committed an initial 10,000 users;
+- the architecture still required scalability and performance review;
+- later purchasing was not tied to verified deployment; and
+- the commercial evaluation emphasized the bulk discount without an enforceable
+  deployment-aligned alternative.
+
+The improved workflow would have required the technical-capacity gate to close, asked
+suppliers to price full and phased structures on the same response sheet, limited the
+initial PO to an approved wave, and blocked later activation until usage evidence was
+reviewed. A decision-maker could still override the gate, but the exposure, owner,
+exception, and rejected alternative would be documented.
+
+For context, the audit examined CAD 8,996,400 of M365 subscription spend across Year 1
+and the first nine months of Year 2 and reported CAD 6,896,597 of unused cost. The app
+contains a separately labelled retrospective boundary showing how usage-aligned billing
+would have behaved at different flexibility premiums. It is an upper-bound
+counterfactual—not realized savings.
+
 ## What the experiment found
 
 With the checked-in assumptions and 2,000 seeded demand scenarios, the search evaluated
@@ -98,10 +133,12 @@ Run the interactive dashboard:
 streamlit run app.py
 ```
 
-In the app, replace the example values with your planned population, day-one need,
-supplier price, contract term, expected rollout completion, and rollout confidence. The
-primary output tells you what to order at contract start, when to review usage, how to
-phase later orders, and what commercial protections to request.
+In the app:
+
+1. build the approval and procurement plan;
+2. replace the example offer rows with actual supplier terms;
+3. download the pricing request, decision record, and comparison; and
+4. return monthly after award to run the usage-review action.
 
 Reproduce the Toronto publication run:
 
@@ -124,6 +161,10 @@ python -m ruff check .
 | Component | What it does | Main file |
 |---|---|---|
 | Guided planner | Translates plain-language procurement inputs into validated forecast, pricing, and risk settings | `planner.py` |
+| Readiness gate | Blocks an unsupported full commitment and identifies evidence, owner, and control gaps | `readiness.py` |
+| Supplier-offer comparison | Prices actual full, phased, and true-down offers on the same scenarios | `quotes.py` |
+| Usage reconciliation | Quantifies unused exposure and produces a reclaim, freeze, true-up, or true-down action | `monitoring.py` |
+| Public counterfactual | Calculates a strictly labelled retrospective usage-aligned billing boundary | `case_analysis.py` |
 | Evidence boundary | Loads public facts separately from assumptions and hypothetical terms | `case_loader.py` |
 | Adoption forecast | Creates seeded logistic rollout paths with demand, speed, and delay uncertainty | `forecast.py` |
 | Commercial engine | Applies floors, review dates, buffers, true-down rules, overage, fees, and escalation monthly | `pricing.py` |
@@ -131,30 +172,37 @@ python -m ruff check .
 | Policy optimizer | Grid-searches auditable combinations and enforces an overage feasibility guardrail | `optimizer.py` |
 | Break-even analysis | Finds the maximum flexibility premium that preserves a risk-adjusted advantage | `analysis.py` |
 | Exports | Writes summary CSV, monthly profiles, detailed JSON, and a Markdown result card | `reporting.py` |
-| User interface | Guides the buyer from seven inputs to a buying schedule, pricing boundary, negotiation terms, and downloads | `app.py` |
+| User interface | Connects approval, sourcing, offer comparison, and recurring control in one workflow | `webapp.py` |
 
 Read [the architecture](docs/architecture.md), [methodology](docs/methodology.md),
 [data dictionary](docs/data-dictionary.md), [interpretation guide](docs/interpretation-guide.md),
-and [repository guide](docs/repository-guide.md).
+[repository guide](docs/repository-guide.md), and
+[organizational pilot playbook](docs/organizational-pilot.md).
 
 ## Repository structure
 
 ```text
 software-commitment-ramp-optimizer/
-├── app.py                         # Streamlit decision dashboard
+├── app.py                         # Stable Streamlit entry point
 ├── case_studies/toronto/          # Public facts, sources, and runnable case
 ├── docs/                          # Architecture, method, guides, article, charts
 ├── outputs/toronto_m365/          # Reproducible model results
 ├── scripts/generate_charts.py     # Publication chart build
-├── src/commitment_optimizer/      # Guided planner, forecast, pricing, simulation, optimization
+├── src/commitment_optimizer/      # Decision gate, sourcing, monitoring, and engine
 └── tests/                         # Unit and public-arithmetic reconciliation tests
 ```
 
 ## Intended use
 
-Use the model during sourcing to define a negotiation zone and to make assumptions
-reviewable by procurement, finance, IT, security, implementation, and legal teams. It
-does not replace supplier quotes, contract review, architecture analysis, or a validated
+Use the workflow as an auditable control during intake, sourcing, approval, PO issuance,
+true-up, and renewal. The open-source release is suitable for an analyst-led pilot and
+can be run inside an organization's environment. A public Streamlit deployment should
+use only non-confidential or masked values.
+
+Enterprise-wide production deployment still requires identity and access management,
+persistent encrypted storage, approval workflow, audit-history controls, notifications,
+and integrations with IAM, HR, ITAM/SAM, ERP/PO, and supplier usage systems. The tool
+does not replace contract review, architecture analysis, supplier quotes, or a validated
 deployment plan.
 
 See the [guided user guide](docs/user-guide.md) for the exact inputs, owners, output

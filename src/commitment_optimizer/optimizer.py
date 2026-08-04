@@ -45,18 +45,13 @@ def optimize_policy(
     for initial_pct in search.initial_commitment_pct_grid:
         # Avoid duplicate/mislabelled candidates when an explicit commercial
         # floor is higher than a percentage in the search grid.
-        if (
-            planning_target_units * initial_pct
-            < base_option.minimum_commitment_units
-        ):
+        if planning_target_units * initial_pct < base_option.minimum_commitment_units:
             continue
         for buffer_pct in search.buffer_pct_grid:
             for frequency in search.adjustment_frequency_options:
                 for allow_true_down in search.allow_true_down_options:
                     frequency_premium = search.frequency_premium_pct.get(frequency, 0.0)
-                    true_down_premium = (
-                        search.true_down_premium_pct if allow_true_down else 0.0
-                    )
+                    true_down_premium = search.true_down_premium_pct if allow_true_down else 0.0
                     multiplier = base_option.unit_price_multiplier * (
                         1.0 + frequency_premium + true_down_premium
                     )
@@ -83,14 +78,11 @@ def optimize_policy(
                         cvar_confidence=search.cvar_confidence,
                     )
                     candidates += 1
-                    expected_demand_unit_months = sum(
-                        summary.monthly_expected_demand
-                    )
+                    expected_demand_unit_months = sum(summary.monthly_expected_demand)
                     overage_share = (
                         0.0
                         if expected_demand_unit_months == 0
-                        else summary.expected_overage_unit_months
-                        / expected_demand_unit_months
+                        else summary.expected_overage_unit_months / expected_demand_unit_months
                     )
                     if (
                         search.max_expected_overage_share is not None

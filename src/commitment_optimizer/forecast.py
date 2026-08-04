@@ -28,9 +28,7 @@ def deterministic_adoption_curve(
     rate = config.growth_rate if growth_rate is None else growth_rate
 
     configured_completion = (
-        config.rollout_complete_month
-        if rollout_complete_month is None
-        else rollout_complete_month
+        config.rollout_complete_month if rollout_complete_month is None else rollout_complete_month
     )
     completion_index = (
         config.horizon_months - 1
@@ -46,15 +44,11 @@ def deterministic_adoption_curve(
     if np.isclose(raw_start, raw_end):
         normalized = np.ones(config.horizon_months)
         if completion_index > 0:
-            normalized[: completion_index + 1] = np.linspace(
-                0.0, 1.0, completion_index + 1
-            )
+            normalized[: completion_index + 1] = np.linspace(0.0, 1.0, completion_index + 1)
     else:
         normalized = np.clip((raw - raw_start) / (raw_end - raw_start), 0.0, 1.0)
 
-    curve = config.initial_active_units + (
-        target - config.initial_active_units
-    ) * normalized
+    curve = config.initial_active_units + (target - config.initial_active_units) * normalized
     curve = np.maximum.accumulate(np.rint(curve)).astype(int)
     return curve
 

@@ -2,8 +2,8 @@
 
 ## Where to start
 
-- Product user: run `streamlit run app.py`, answer the seven guided questions, and
-  download the procurement plan.
+- Product user: run `streamlit run app.py`, complete the approval gate, compare actual
+  supplier offers, and run the recurring usage review.
 - Sourcing analyst: copy the Toronto JSON, replace facts and options, and retain the
   evidence classes.
 - Research reviewer: begin with `methodology.md`, the checked-in outputs, and tests.
@@ -14,8 +14,13 @@
 
 | Path | Responsibility |
 |---|---|
-| `app.py` | Guided procurement inputs, recommendation, charts, and downloads |
+| `app.py` | Stable Streamlit entry point |
+| `src/commitment_optimizer/webapp.py` | Approval, offer comparison, usage control, Toronto evidence, and downloads |
 | `src/commitment_optimizer/planner.py` | Buyer-input translation, plan orchestration, schedule, and procurement memo |
+| `src/commitment_optimizer/readiness.py` | Evidence gates, blockers, conditions, and decision-record gaps |
+| `src/commitment_optimizer/quotes.py` | Supplier pricing request and actual-offer comparison |
+| `src/commitment_optimizer/monitoring.py` | Post-award usage reconciliation and contract actions |
+| `src/commitment_optimizer/case_analysis.py` | Labelled retrospective public-case calculations |
 | `src/commitment_optimizer/models.py` | Validated domain objects |
 | `src/commitment_optimizer/case_loader.py` | JSON-to-domain loading and evidence metadata |
 | `src/commitment_optimizer/forecast.py` | Deterministic curve and stochastic paths |
@@ -28,7 +33,7 @@
 | `case_studies/toronto` | Audit facts, sources, assumptions, and commercial scenarios |
 | `outputs/toronto_m365` | Publication result bundle |
 | `scripts/generate_charts.py` | Static article charts |
-| `tests` | Unit, behavior, reproducibility, and reconciliation checks |
+| `tests` | Engine, approval gate, offer, monitoring, UI, and evidence checks |
 
 ## Add a case study
 

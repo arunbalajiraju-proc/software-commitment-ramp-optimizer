@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "software-commitment-ramp-optimizer"
-version = "0.2.0"
-description = "Risk-adjusted software licence commitment and deployment-ramp decision support."
+version = "0.3.0"
+description = "Software commitment approval, sourcing, optimization, and usage control."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }

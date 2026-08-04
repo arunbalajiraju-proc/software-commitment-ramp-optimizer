@@ -1,93 +1,172 @@
-# Guided user guide
+# Operating guide
 
-## What the planner answers
+## What the workflow answers
 
-The planner is designed for procurement, software asset management, finance, IT, and
-project-delivery users who need a practical pre-award answer:
+The application is designed for procurement, software asset management, finance,
+architecture, IT, security/privacy, and project-delivery users. It answers five linked
+questions:
 
-> How many licence units should we commit at contract start, how should later purchases
-> be phased, and what flexibility is worth paying for?
+1. Is the evidence strong enough to approve a large software commitment?
+2. If so, what quantity should be committed initially and how should later orders be phased?
+3. How much is contractual flexibility worth under uncertainty?
+4. Which actual supplier offer has the best risk-adjusted commercial result?
+5. After award, what action should be taken when commitment and active use diverge?
 
-It returns:
+The numerical optimizer remains important, but it no longer approves a purchase by
+itself. A separate readiness gate can hold the full commitment even when the engine can
+calculate an attractive quantity.
 
-1. an initial committed quantity;
-2. a formal usage-review cadence;
-3. an expected phase-by-phase procurement schedule;
-4. a quantity rule based on measured active usage and a buffer;
-5. a maximum modelled price premium for flexibility;
-6. a comparison with full upfront commitment;
-7. supplier terms to request and actions required before award; and
-8. a downloadable Markdown procurement plan and JSON model record.
+## Tab 1: Plan and approve
 
-## The seven required inputs
+### Required commercial and demand facts
 
-| Input | Plain-language meaning | Suggested owner or source |
+| Input | Plain-language meaning | Suggested evidence owner |
 |---|---|---|
-| Software or project name | Label used in the downloaded plan | Procurement or project lead |
-| Total licences after rollout | Maximum credible steady-state licence requirement | HR, IAM, device inventory, application owner, demand forecast |
-| Day-one licences | Units able to use the software when the contract starts | Deployment wave 1 or go-live plan |
-| Full-commitment unit price | Supplier price if the full planned quantity is committed now | Quote, reseller response, catalogue, incumbent renewal |
-| Contract term | Number of months covered by the commercial decision | Draft order form or sourcing strategy |
-| Rollout completion month | Month when the intended population should be substantially live | Approved implementation plan |
-| Rollout confidence and planning posture | Degree of schedule uncertainty and desired cost/risk balance | Joint business, IT, finance, security, and procurement assessment |
+| Software or project name | Label for the decision record | Procurement or project lead |
+| Licence-unit definition | The metric being purchased: users, devices, cores, sites, or another unit | SAM/ITAM, technical owner, supplier |
+| Total units after rollout | Maximum credible steady-state requirement | HR, IAM, inventory, application owner |
+| Day-one units | Named population that can actually use the product at contract start | Project or deployment-wave owner |
+| Full-commitment price | Price if the full target is committed immediately | Supplier quote, reseller response, catalogue |
+| Contract term | Months covered by the commercial decision | Draft order form or sourcing strategy |
+| Rollout-completion month | Month when the intended population should be substantially live | Approved implementation plan |
+| Rollout confidence | Likelihood that dates and dependencies will hold | Joint project, IT, security, and business review |
+| Planning posture | Balance between unused capacity and emergency overage | Procurement and finance |
 
-The price may be entered per month or per year. The planner converts annual pricing into
-a monthly unit price before running the commercial engine.
+Do not mix unlike licence metrics. A bundle of one user licence and two add-ons may be
+represented as one user package or three subscription equivalents, but the quantity and
+unit price must use the same denominator throughout.
 
-## Optional assumptions
+### Mandatory readiness gate
 
-The first run can use the documented defaults. Once supplier pricing is available,
-replace:
+Use **Confirmed** only when an accountable owner can point to evidence.
 
-- the overage price uplift;
-- the price premium for monthly, quarterly, semiannual, or annual adjustment rights;
-- the additional price premium for true-down rights; and
-- the number of planning scenarios.
+| Gate | Evidence expected | Consequence when not confirmed |
+|---|---|---|
+| Demand | Named day-one list and reconciled steady-state population | Hold full commitment |
+| Architecture | Capacity or scalability tested for the first wave | Hold full commitment |
+| Delivery | Approved dated deployment waves and named owners | Hold full commitment |
+| Dependencies | Critical security, privacy, integration, data, and change items cleared | Hold full commitment |
+| Pilot/POC | Required pilot completed and accepted | Hold full commitment |
+| Usage reporting | Buyer can obtain active-use evidence at least monthly | Phase with conditions |
+| Phased pricing | Suppliers have priced comparable full and phased structures | Phase with conditions |
+| Usage owner | Named owner will run every reconciliation | Phase with conditions |
 
-These values are commercial assumptions, not market benchmarks. The selected review
-cadence can change when the supplier prices flexibility differently.
+The tool intentionally does not calculate a readiness percentage. A score can hide one
+critical blocker behind several easy checks. The outcome is one of:
 
-## How to use the procurement schedule
+- **Hold full commitment** — do not approve the target quantity;
+- **Proceed only with phased commitment** — core delivery evidence is ready, but
+  commercial or operating controls remain; or
+- **Ready for commercial comparison** — compare actual compliant offers before approval.
 
-The schedule shows the expected active population and committed quantity at each review.
-It is a planning calendar, not an instruction to place every future order automatically.
+### Primary outputs
 
-At each review:
+- readiness decision, blockers, conditions, and missing decision-record fields;
+- modelled initial floor and percentage of steady-state demand;
+- expected activation and commitment schedule;
+- P90 budget and risk-adjusted comparison with full commitment;
+- break-even flexibility premium;
+- three-structure supplier pricing request;
+- order-form and PO controls; and
+- downloadable approval plan, supplier-pricing CSV, and JSON model record.
 
-1. obtain measured active usage;
-2. reconcile leavers, reassignment rights, dormant accounts, devices, cores, or the
-   applicable licence metric;
-3. apply the recommended operating buffer;
-4. compare the result with the contractual floor and prior commitment;
-5. issue the permitted true-up or true-down; and
-6. retain the usage evidence with the purchase-order record.
+The modelled initial floor is conditional when the readiness decision is a hold. It must
+not be copied into a PO until the blockers are closed or an authorized exception is
+documented.
 
-## How to use the price ceiling
+## Tab 2: Compare offers
 
-The maximum flexibility premium is the point at which the recommended phased structure
-and full upfront commitment have the same modelled risk-adjusted cost. Use it as a
-negotiation boundary:
+Use this after bidders or the incumbent provide actual commercial terms.
 
-- below the boundary, the model still supports paying for flexibility;
-- above the boundary, the full-commitment structure prices better under the entered
-  assumptions; and
-- the boundary is not a forecast of what the supplier will quote or proof that the term
-  is obtainable.
+For each compliant offer, enter:
 
-## Recommended sourcing workflow
+- monthly unit price;
+- initial commitment;
+- review cadence;
+- true-down permission;
+- contractual minimum;
+- buffer;
+- overage uplift;
+- annual escalation;
+- one-time fees; and
+- monthly fixed fees.
 
-1. Run an internal planning version before releasing the sourcing event.
-2. Ask bidders to price both full commitment and the recommended phased structure.
-3. Replace the optional premium assumptions with each compliant bid.
-4. Compare the resulting schedules, expected costs, P90 budgets, and unused spend.
-5. Use the downloadable procurement plan as an input to the negotiation memo.
-6. Translate the selected quantity rule, dates, floor, pricing, notice, evidence, and
-   remedy into the order form or statement of work.
-7. Assign an operational owner for each post-award usage review.
+All offers are evaluated on the same seeded demand paths and risk posture. The table
+ranks expected cost, P90 budget, unused-capacity cost, utilization, and risk-adjusted
+difference from the full-commitment baseline.
 
-## Guardrails
+The lowest financial rank is not automatically the award recommendation. First confirm
+functional, technical, security, legal, accessibility, implementation, and mandatory
+commercial compliance. Record any qualitative value that is outside the model.
 
-The planner does not validate the licence metric, bundle entitlements, technical
-architecture, supplier willingness, legal enforceability, tax, foreign exchange, or
-confidential discount approvals. A generated plan must be reviewed by the relevant
-commercial, finance, delivery, software-asset, security, architecture, and legal owners.
+## Tab 3: Review usage
+
+Run this monthly for material SaaS agreements and before a true-up, renewal, or
+additional PO.
+
+Enter:
+
+- units currently paid or committed;
+- actively used units under the agreed measurement rule;
+- assigned but inactive units;
+- monthly unit price;
+- operating buffer; and
+- whether true-down is contractually allowed.
+
+The review returns:
+
+- current utilization and unused units;
+- monthly and annualized unused-cost exposure;
+- units to reclaim or reassign immediately;
+- recommended commitment after applying the buffer; and
+- a true-up, true-down, freeze, or maintain action.
+
+If the contract has no true-down right, the tool does not pretend that the buyer can
+reduce invoices. It recommends stopping net-new purchases, consuming the existing pool,
+and seeking credits, swaps, delayed billing, or renewal relief.
+
+Retain the source usage report, reconciliation date, measurement rule, and approver with
+the PO or contract-management record.
+
+## Toronto evidence tab
+
+The Toronto tab separates three kinds of analysis:
+
+1. facts directly reported by the Auditor General;
+2. transparent arithmetic derived from those facts; and
+3. illustrative counterfactuals that were not disclosed supplier terms.
+
+The readiness walkthrough shows that known architecture limits would have triggered a
+hold-full-commitment decision. The premium slider then shows a retrospective upper-bound
+difference if billing had followed observed use. That figure is not a savings claim and
+must not be represented as recoverable or realized money.
+
+## Procurement operating sequence
+
+1. Define the licence metric and reconcile the demand population.
+2. Complete the readiness gate with evidence owners—not procurement alone.
+3. Download the pricing template and require comparable full and phased responses.
+4. Enter actual compliant offers and compare TCO, P90, unused exposure, and risk.
+5. Translate the selected structure into measurable dates, floors, prices, notices,
+   reporting duties, and remedies.
+6. Record cross-functional approval or a documented exception before issuing the PO.
+7. Run the usage review monthly and before every adjustment date.
+8. Replace forecast quantities with measured active use before each later order.
+9. Re-run the plan when project dates, demand, supplier pricing, or contract terms change.
+
+## Security and deployment
+
+Do not put confidential supplier pricing, user-level data, or contract-sensitive terms
+into a public Streamlit deployment. Use masked values or deploy the repository inside a
+controlled organizational environment.
+
+The open-source application is suitable for an analyst-led pilot. Enterprise-wide use
+should add:
+
+- SSO and role-based access;
+- encrypted persistent storage and retention controls;
+- approval workflow and immutable audit history;
+- scheduled notifications and review calendars;
+- integrations with IAM, HR, ITAM/SAM, ERP/PO, and supplier APIs;
+- SKU, bundle, entitlement, tax, FX, and accounting logic; and
+- organization-specific thresholds, policy rules, and approved legal language.

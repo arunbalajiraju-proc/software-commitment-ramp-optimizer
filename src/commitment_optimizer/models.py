@@ -51,23 +51,12 @@ class ForecastConfig:
         if self.rollout_complete_month is not None and not (
             1 <= self.rollout_complete_month <= self.horizon_months
         ):
-            raise ValueError(
-                "rollout_complete_month must be between 1 and horizon_months"
-            )
-        if (
-            self.rollout_complete_month == 1
-            and self.initial_active_units < self.target_units
-        ):
-            raise ValueError(
-                "rollout_complete_month must be at least 2 when rollout is incomplete"
-            )
+            raise ValueError("rollout_complete_month must be between 1 and horizon_months")
+        if self.rollout_complete_month == 1 and self.initial_active_units < self.target_units:
+            raise ValueError("rollout_complete_month must be at least 2 when rollout is incomplete")
         if not 0 <= self.delay_probability <= 1:
             raise ValueError("delay_probability must be between 0 and 1")
-        if not (
-            0 <= self.delay_min_months
-            <= self.delay_mode_months
-            <= self.delay_max_months
-        ):
+        if not (0 <= self.delay_min_months <= self.delay_mode_months <= self.delay_max_months):
             raise ValueError("delay values must satisfy 0 <= min <= mode <= max")
         if self.target_volatility_pct < 0 or self.growth_volatility_pct < 0:
             raise ValueError("volatility values cannot be negative")
@@ -117,12 +106,15 @@ class CommercialOption:
             raise ValueError("buffer_pct cannot be negative")
         if self.overage_multiplier < 1:
             raise ValueError("overage_multiplier must be at least 1")
-        if min(
-            self.one_time_fee,
-            self.monthly_fixed_fee,
-            self.annual_escalation_pct,
-            self.unit_price_multiplier,
-        ) < 0:
+        if (
+            min(
+                self.one_time_fee,
+                self.monthly_fixed_fee,
+                self.annual_escalation_pct,
+                self.unit_price_multiplier,
+            )
+            < 0
+        ):
             raise ValueError("fees, escalation, and multipliers cannot be negative")
 
     def to_dict(self) -> dict[str, Any]:

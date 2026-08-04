@@ -16,6 +16,7 @@ from .models import (
     SimulationSummary,
 )
 from .optimizer import OptimizationResult, optimize_policy
+from .readiness import ReadinessAssessment, ReadinessInputs, assess_readiness
 from .simulation import simulate_option
 
 DEFAULT_FREQUENCY_PREMIUMS = {1: 0.20, 3: 0.12, 6: 0.06, 12: 0.0}
@@ -65,6 +66,7 @@ class PlannerInputs:
     unit_price_month: float
     contract_months: int
     rollout_complete_month: int
+    unit_label: str = "licence units"
     rollout_confidence: str = "Medium"
     risk_posture: str = "Balanced"
     overage_premium_pct: float = 0.10
@@ -74,12 +76,15 @@ class PlannerInputs:
     true_down_premium_pct: float = 0.08
     simulations: int = 500
     seed: int = 20260803
+    readiness: ReadinessInputs = field(default_factory=ReadinessInputs)
 
     def __post_init__(self) -> None:
         if not self.deal_name.strip():
             raise ValueError("deal_name cannot be blank")
         if not self.currency.strip():
             raise ValueError("currency cannot be blank")
+        if not self.unit_label.strip():
+            raise ValueError("unit_label cannot be blank")
         if self.target_units < 1:
             raise ValueError("target_units must be at least 1")
         if not 0 <= self.day_one_units <= self.target_units:
@@ -89,15 +94,11 @@ class PlannerInputs:
         if self.contract_months < 2:
             raise ValueError("contract_months must be at least 2")
         if not 2 <= self.rollout_complete_month <= self.contract_months:
-            raise ValueError(
-                "rollout_complete_month must be between 2 and contract_months"
-            )
+            raise ValueError("rollout_complete_month must be between 2 and contract_months")
         if self.rollout_confidence not in _CONFIDENCE_ASSUMPTIONS:
             raise ValueError("rollout_confidence must be High, Medium, or Low")
         if self.risk_posture not in _RISK_SETTINGS:
-            raise ValueError(
-                "risk_posture must be Cost focused, Balanced, or Conservative"
-            )
+            raise ValueError("risk_posture must be Cost focused, Balanced, or Conservative")
         if self.overage_premium_pct < 0 or self.true_down_premium_pct < 0:
             raise ValueError("commercial premiums cannot be negative")
         if any(month < 1 or premium < 0 for month, premium in self.frequency_premium_pct.items()):
@@ -116,6 +117,9 @@ class PlannerResult:
     baseline_summary: SimulationSummary
     optimized: OptimizationResult
     break_even_premium: float | None
+    readiness_assessment: ReadinessAssessment
+    risk_aversion: float
+    cvar_confidence: float
 
 
 def _growth_rate(rollout_complete_month: int) -> float:
@@ -224,6 +228,9 @@ def run_procurement_plan(inputs: PlannerInputs) -> PlannerResult:
         baseline_summary=baseline_summary,
         optimized=optimized,
         break_even_premium=break_even,
+        readiness_assessment=assess_readiness(inputs.readiness),
+        risk_aversion=optimization.risk_aversion,
+        cvar_confidence=optimization.cvar_confidence,
     )
 
 
@@ -299,6 +306,7 @@ def procurement_plan_markdown(result: PlannerResult) -> str:
         else f"{result.break_even_premium:.1%} above the full-commitment unit price"
     )
     true_down = "Include true-down rights" if option.allow_true_down else "Use true-up only"
+    readiness = result.readiness_assessment
     schedule = procurement_schedule(result)
     lines = [
         f"# Procurement plan: {inputs.deal_name}",
@@ -306,22 +314,42 @@ def procurement_plan_markdown(result: PlannerResult) -> str:
         "> Planning guidance generated from user-entered assumptions. Validate quantities, "
         "supplier terms, implementation dependencies, and legal language before award.",
         "",
-        "## Recommended buying approach",
+        "## Approval gate",
         "",
-        f"- Start with **{start_units:,} licence units** "
-        f"({start_units / inputs.target_units:.1%} of the {inputs.target_units:,} planned need).",
-        "- Review actual active usage "
-        f"**{review_frequency_label(option.adjustment_frequency_months)}**.",
-        "- At each review, set the commitment to active usage plus a "
-        f"**{option.buffer_pct:.0%} buffer**.",
-        f"- {true_down}.",
-        f"- Pricing guardrail for phased flexibility: **{premium}**.",
-        "",
-        "## Expected procurement schedule",
-        "",
-        "| Timing | Expected active | Planned commitment | Change | Action |",
-        "|---|---:|---:|---:|---|",
+        f"- Decision: **{readiness.decision}**.",
+        f"- Modelled quantity: **{start_units:,} {inputs.unit_label}**. This is not an "
+        "approved PO quantity until the readiness conditions below are closed.",
     ]
+    if readiness.blockers:
+        lines.extend(["- Full-commitment blockers:"])
+        lines.extend(f"  - {item}" for item in readiness.blockers)
+    if readiness.conditions:
+        lines.extend(["- Commercial and operating conditions:"])
+        lines.extend(f"  - {item}" for item in readiness.conditions)
+    if readiness.record_gaps:
+        lines.extend(["- Decision-record gaps:"])
+        lines.extend(f"  - {item}" for item in readiness.record_gaps)
+    lines.extend(
+        [
+            "",
+            "## Recommended buying approach",
+            "",
+            f"- Start with **{start_units:,} {inputs.unit_label}** "
+            f"({start_units / inputs.target_units:.1%} of the "
+            f"{inputs.target_units:,} planned need).",
+            "- Review actual active usage "
+            f"**{review_frequency_label(option.adjustment_frequency_months)}**.",
+            "- At each review, set the commitment to active usage plus a "
+            f"**{option.buffer_pct:.0%} buffer**.",
+            f"- {true_down}.",
+            f"- Pricing guardrail for phased flexibility: **{premium}**.",
+            "",
+            "## Expected procurement schedule",
+            "",
+            "| Timing | Expected active | Planned commitment | Change | Action |",
+            "|---|---:|---:|---:|---|",
+        ]
+    )
     for row in schedule:
         lines.append(
             f"| {row['timing']} | {row['expected_active_units']:,} | "
@@ -342,7 +370,7 @@ def procurement_plan_markdown(result: PlannerResult) -> str:
             "",
             "## Terms to take into the sourcing event",
             "",
-            f"1. Initial order or committed floor of {start_units:,} licence units.",
+            f"1. Initial order or committed floor of {start_units:,} {inputs.unit_label}.",
             "2. Formal quantity review "
             f"{review_frequency_label(option.adjustment_frequency_months)}.",
             f"3. Commitment reset to measured active usage plus {option.buffer_pct:.0%}.",
@@ -361,6 +389,8 @@ def procurement_plan_markdown(result: PlannerResult) -> str:
             "- Obtain comparable pricing for full commitment and phased activation.",
             "- Replace assumed flexibility premiums with supplier quotes and rerun the plan.",
             "- Put the agreed activation schedule and adjustment mechanics in the order form.",
+            "- Record Procurement, Finance, Project, IT/Architecture, Security/Privacy, "
+            "and Legal approvals or documented exceptions before issuing the PO.",
         ]
     )
     return "\n".join(lines) + "\n"

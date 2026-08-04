@@ -125,8 +125,7 @@ def commitment_ramp_chart() -> None:
             subset["expected_demand"],
             subset["expected_commitment"],
             where=(
-                subset["expected_commitment"].to_numpy()
-                >= subset["expected_demand"].to_numpy()
+                subset["expected_commitment"].to_numpy() >= subset["expected_demand"].to_numpy()
             ),
             color=COLORS["sand"],
             alpha=0.13,

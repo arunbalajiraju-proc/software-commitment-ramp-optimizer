@@ -93,10 +93,10 @@ Before signature, a buyer typically has at least five imperfect inputs:
 5. possible flexibility terms, even if they carry a premium.
 
 The interface does not ask the buyer to translate those facts into Monte Carlo or CVaR
-parameters. It asks seven plain-language questions: total need, day-one need, unit price,
-contract term, rollout completion, rollout confidence, and planning posture. A
-translation layer maps those answers into the numerical model and converts the result
-back into a buying schedule and negotiation position.
+parameters. It asks plain-language commercial questions, then five evidence-gate
+questions about demand, architecture, delivery, dependencies, and usage reporting. A
+translation layer maps the commercial answers into the numerical model; the gate decides
+whether the output can be treated as an approvable commitment.
 
 The buyer rarely knows one “correct” deployment forecast. What it can know is a range:
 earliest, most likely, and latest readiness; possible final demand; and how fast adoption
@@ -124,6 +124,68 @@ can say:
 > becomes better. Here is the overage exposure and P90 budget for each option.
 
 That is a negotiable position.
+
+---
+
+## Could this have prevented Toronto's unused M365 cost?
+
+The honest answer is **not automatically**. A model cannot force an organization to use
+it, a supplier to offer flexible billing, or a decision-maker to reject a bulk discount.
+The public record also does not disclose the complete contract, internal forecast,
+bundle value, or every concession available at signature.
+
+But the audit contains a fact that should have changed the approval process before any
+simulation was run: the network had been estimated to support only 6,000 users, while the
+agreement covered an initial 10,000 users, and architecture scalability still required
+review.
+
+The improved application therefore adds a non-compensating readiness gate. It asks
+whether demand is evidenced, technical capacity is confirmed, a dated deployment plan is
+approved, critical dependencies are cleared, a required pilot is complete, monthly usage
+reporting exists, and an owner is assigned. If architecture is not confirmed, good
+answers elsewhere cannot average the problem away. The result is:
+
+> **Hold the full commitment.** The modelled quantity may be used for planning, but it is
+> not an approved purchase-order quantity until the blocker is closed or an authorized
+> exception is documented.
+
+If that control had been completed honestly and enforced, a 10,000-user full commitment
+would not have passed as an ordinary approval. The next practical steps would have been:
+
+1. identify the independently verified first deployable wave;
+2. ask suppliers to price the full commitment, phased activation, and phased activation
+   with true-down on one comparable schedule;
+3. evaluate total and P90 cost, not just headline unit discount;
+4. put activation dates, quantity formula, usage evidence, delay rights, and repricing
+   limits into the order form; and
+5. block each later PO until deployment and active-use evidence is reviewed.
+
+A decision-maker could still choose the full commitment. The difference is that the
+architecture gap, unused-cost exposure, owner, rejected phased alternative, and override
+would be visible in the approval record.
+
+The audit examined CAD 8,996,400 of M365 subscription spend across Year 1 and the first
+nine months of Year 2 and reported CAD 6,896,597 of unused cost. Management reported
+approximately CAD 2.8 million of bulk-discount savings over the five-year contract. The
+early unused cost therefore exceeded that stated five-year discount by about CAD 4.10
+million.
+
+The application includes a separate retrospective slider. It subtracts the published
+unused cost from examined spend to create a used-cost proxy, then applies an illustrative
+premium for usage-aligned billing. At a 15% premium, the proxy is:
+
+```text
+examined spend                         CAD 8,996,400
+less audit-reported unused cost        CAD 6,896,597
+used-cost proxy                        CAD 2,099,803
+usage-aligned proxy at 15% premium     CAD 2,414,773
+upper-bound difference                 CAD 6,581,627
+```
+
+That is **not a savings claim**. It uses observed outcomes, assumes billing could follow
+use, and ignores confidential bundle value and supplier constraints. Its purpose is to
+show the scale of the negotiation boundary and why deployment-aligned pricing deserved a
+mandatory response—not to rewrite history.
 
 ---
 
@@ -259,11 +321,11 @@ activation rights before the economics reverse.
 This can become an RFP evaluation rule or negotiation walk-away point. It does not predict
 what a supplier will quote.
 
-### 9. Dashboard and exports
+### 9. Approval, sourcing, and control workflow
 
-The Streamlit interface is designed as a procurement planner rather than a model console.
-The primary screen asks for information that procurement, software asset management, and
-the project team can reasonably provide. It returns:
+The Streamlit interface is designed as a procurement operating workflow rather than a
+model console. The first tab asks for information that procurement, software asset
+management, architecture, and the project team can reasonably provide. It returns:
 
 - the number of licence units to order at contract start;
 - the usage-review cadence and phase-by-phase expected buying schedule;
@@ -274,9 +336,19 @@ the project team can reasonably provide. It returns:
 - a downloadable Markdown procurement plan; and
 - detailed JSON for reviewers who need the assumptions and model outputs.
 
+The second tab compares actual supplier offers. Analysts can enter each offer's unit
+price, starting quantity, floor, review cadence, true-down right, buffer, overage,
+escalation, and fees. Every offer is evaluated on the same seeded demand paths.
+
+The third tab is post-award. It takes committed units, active use, assigned-but-inactive
+units, price, buffer, and true-down permission. It calculates current unused exposure and
+produces a reclaim, freeze, true-up, true-down, or maintain action. If the agreement has
+no true-down right, the tool does not fabricate one; it recommends consuming the existing
+pool and seeking credits or renewal relief.
+
 CVaR, candidate counts, and other technical diagnostics remain available in an advanced
-section. The Toronto evidence sits in a separate tab so the public facts are not confused
-with user-entered commercial assumptions.
+section. The Toronto evidence sits in a separate tab so public facts, prospective control
+logic, and retrospective counterfactuals are not confused.
 
 The command-line interface creates the same reproducible result bundle for peer review or
 version control.
@@ -443,9 +515,11 @@ state risk appetite. That is more honest, but organizationally harder.
 It may require a higher unit price, stronger minimums, or shorter price protection. The
 solution is therefore not a free clause; it is a quantified trade.
 
-**Post-award optimization and pre-award sourcing are different products.** A dashboard
-that finds inactive accounts is valuable, but it does not tell a buyer whether a 30,000
-unit floor, quarterly ramp, or premium true-down should be signed in the first place.
+**Post-award control and pre-award sourcing are different decisions, but they need the
+same evidence loop.** A dashboard that finds inactive accounts cannot decide the original
+floor by itself. The improved workflow therefore keeps the prospective optimizer and
+post-award reconciliation separate while connecting both to the same unit definition,
+usage owner, review cadence, and contract rights.
 
 The remaining opportunity is not to invent a better shelfware detector. It is to connect
 readiness risk with commercial-option valuation before the contract clock starts.
@@ -460,13 +534,13 @@ The full project is available at:
 
 ```text
 software-commitment-ramp-optimizer/
-├── app.py                         # Guided Streamlit procurement planner
+├── app.py                         # Stable Streamlit entry point
 ├── case_studies/toronto/          # Audit facts, sources, and case inputs
 ├── docs/                          # Architecture, methodology, guides, article
 ├── outputs/toronto_m365/          # Reproducible CSV, JSON, and Markdown results
 ├── scripts/generate_charts.py     # Static publication charts
-├── src/commitment_optimizer/      # Planner translation layer and numerical engine
-└── tests/                         # Unit and audit-reconciliation tests
+├── src/commitment_optimizer/      # Approval, sourcing, monitoring, and numerical engine
+└── tests/                         # Engine, workflow, UI, and evidence tests
 ```
 
 Install Python 3.11 or newer, then:

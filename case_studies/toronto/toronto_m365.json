@@ -29,6 +29,16 @@
       "source_page": 10
     }
   ],
+  "counterfactual": {
+    "examined_period_months": 21,
+    "examined_subscription_spend": 8996400,
+    "reported_unused_cost": 6896597,
+    "reported_five_year_bulk_discount": 2800000,
+    "contracted_users": 10000,
+    "subscription_licence_equivalents": 30000,
+    "known_network_capacity_users": 6000,
+    "source_pages": [8, 9]
+  },
   "simulation_notice": "Only the upfront cost proxy is derived from the public audit. The rollout distribution, delay probability, alternative price premiums, review frequencies, and true-down rights below are illustrative assumptions used to demonstrate the tool. They are not City of Toronto or Microsoft contract terms.",
   "simulation": {
     "forecast": {

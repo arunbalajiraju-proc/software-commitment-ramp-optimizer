@@ -93,9 +93,7 @@ def simulate_path(
         total_billed_units += commitment + overage_units
 
     utilization_pct = (
-        100.0
-        if total_billed_units == 0
-        else 100.0 * total_demand / total_billed_units
+        100.0 if total_billed_units == 0 else 100.0 * total_demand / total_billed_units
     )
     return PathResult(
         total_cost=total_cost,

@@ -1,5 +1,25 @@
 # Data dictionary
 
+## Readiness input and assessment
+
+| Field | Type | Meaning |
+|---|---|---|
+| `demand_evidence_status` | status | Whether day-one and steady-state quantities have named evidence |
+| `technical_capacity_status` | status | Whether architecture supports the first wave |
+| `implementation_plan_status` | status | Whether dated deployment waves and owners are approved |
+| `critical_dependencies_status` | status | Whether security, privacy, integration, data, and change blockers are cleared |
+| `usage_reporting_status` | status | Whether buyer-accessible monthly active-use reporting exists |
+| `pilot_required` / `pilot_complete` | boolean | Whether a required pilot has been completed and accepted |
+| `phased_pricing_requested` | boolean | Whether comparable full and phased prices were requested |
+| `decision_owner` | string | Accountable commitment decision owner |
+| `project_owner` | string | Accountable deployment owner |
+| `usage_review_owner` | string | Owner of each post-award reconciliation |
+| `demand_evidence_reference` | string | Reference to the population or wave evidence |
+| `decision` | enum | Hold full commitment, phase with conditions, or ready for comparison |
+| `blockers` | list | Non-compensating items that prevent full commitment |
+| `conditions` | list | Commercial or operating controls required before award |
+| `record_gaps` | list | Missing audit-trail fields that do not change the numerical result |
+
 ## Forecast configuration
 
 | Field | Type | Meaning |
@@ -37,6 +57,34 @@
 | `unit_price_multiplier` | number | Multiplier applied to every tier, often representing flexibility premium |
 | `description` | string | Plain-language scenario note |
 | `evidence_class` | string | Published, derived, modelled, or user-entered status |
+
+## Supplier quote
+
+| Field | Meaning |
+|---|---|
+| `offer_name` | Supplier or commercial-structure label |
+| `unit_price_month` | Quoted price per unit per month |
+| `initial_commitment_units` | Quantity billed at contract start |
+| `adjustment_frequency_months` | Formal true-up or true-down cadence |
+| `allow_true_down` | Whether commitment can decrease at a review |
+| `minimum_commitment_units` | Contractual quantity floor |
+| `buffer_pct` | Capacity added above measured active use |
+| `overage_premium_pct` | Price uplift on demand above commitment |
+| `annual_escalation_pct` | Annual unit-price increase |
+| `one_time_fee` / `monthly_fixed_fee` | Non-unit commercial charges |
+
+## Usage snapshot and action
+
+| Field | Meaning |
+|---|---|
+| `committed_units` | Units currently paid or contractually committed |
+| `active_units` | Units meeting the buyer's agreed active-use rule |
+| `assigned_but_inactive_units` | Assigned units that can be reclaimed or reassigned |
+| `current_unused_cost_month` | Current unused units multiplied by monthly unit price |
+| `annualized_unused_cost_exposure` | Current monthly unused cost multiplied by 12; not a forecast |
+| `recommended_commitment_units` | Active use plus the selected operating buffer |
+| `commitment_change_units` | Recommended commitment less current commitment |
+| `primary_action` | True-up, true-down, freeze, or maintain instruction |
 
 ## Optimization configuration
 

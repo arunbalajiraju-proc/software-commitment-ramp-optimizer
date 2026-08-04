@@ -5,6 +5,16 @@
 1. City of Toronto Auditor General, [Audit of Software Acquisition and Licence Management: Managing and Optimizing Value from Software Licences](https://www.toronto.ca/legdocs/mmis/2024/au/bgrd/backgroundfile-251260.pdf), December 2024.
 2. City of Toronto Auditor General, [2026 Consolidated Follow-up Report](https://www.toronto.ca/legdocs/mmis/2026/au/bgrd/backgroundfile-288922.pdf), June 2026.
 
+Key 2024 audit references used by the application:
+
+- report page 8: known network-capacity constraint, 10,000-user initial commitment,
+  annual and five-year cost, claimed bulk-discount savings, and deployment outcome;
+- report page 9: Year 1 and first-nine-months-of-Year-2 spend, utilization, and unused cost;
+- report page 11: recommendations to defer or adjust licence volumes when projects or
+  requirements change; and
+- management response pages 29–30: commitment to balance bulk savings against unused-
+  licence risk and pursue better future contract terms.
+
 ## Evidence boundary
 
 The files in this directory distinguish three evidence classes:

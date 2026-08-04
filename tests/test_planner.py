@@ -27,9 +27,7 @@ class PlannerTests(unittest.TestCase):
         )
 
     def test_plain_language_inputs_build_valid_configuration(self) -> None:
-        forecast, baseline, template, optimization = build_planner_configuration(
-            self.inputs
-        )
+        forecast, baseline, template, optimization = build_planner_configuration(self.inputs)
         self.assertEqual(forecast.rollout_complete_month, 12)
         self.assertEqual(baseline.minimum_commitment_units, 1_000)
         self.assertEqual(template.minimum_commitment_units, 100)
@@ -47,6 +45,8 @@ class PlannerTests(unittest.TestCase):
         self.assertTrue(all(row["action"] for row in schedule))
 
         memo = procurement_plan_markdown(result)
+        self.assertIn("Approval gate", memo)
+        self.assertIn("Hold full commitment", memo)
         self.assertIn("Recommended buying approach", memo)
         self.assertIn("Terms to take into the sourcing event", memo)
         self.assertIn("Test procurement", memo)

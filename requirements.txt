@@ -1,2 +1,3 @@
+# Release 0.3.0: force a clean Streamlit build after the workflow/schema upgrade.
 # Install the local package and the runtime dependencies declared in pyproject.toml.
 -e .

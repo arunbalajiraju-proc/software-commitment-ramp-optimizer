@@ -15,6 +15,7 @@ class CaseLoaderTests(unittest.TestCase):
         self.assertEqual(case.optimization_template.unit_price_multiplier, 1.0)
         self.assertEqual(case.optimization.frequency_premium_pct[6], 0.06)
         self.assertEqual(case.optimization.max_expected_overage_share, 0.10)
+        self.assertEqual(case.counterfactual["reported_unused_cost"], 6_896_597)
         self.assertIn("illustrative", case.simulation_notice.lower())
 
 

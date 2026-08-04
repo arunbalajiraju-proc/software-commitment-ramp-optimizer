@@ -17,6 +17,7 @@ class CaseStudy:
     organization: str
     decision_question: str
     published_facts: tuple[dict[str, Any], ...]
+    counterfactual: dict[str, Any]
     simulation_notice: str
     forecast: ForecastConfig
     commercial_options: tuple[CommercialOption, ...]
@@ -27,9 +28,7 @@ class CaseStudy:
 
 def _option_from_dict(data: dict[str, Any]) -> CommercialOption:
     values = dict(data)
-    values["price_tiers"] = tuple(
-        PriceTier(**tier) for tier in values.get("price_tiers", [])
-    )
+    values["price_tiers"] = tuple(PriceTier(**tier) for tier in values.get("price_tiers", []))
     return CommercialOption(**values)
 
 
@@ -62,15 +61,13 @@ def load_case(path: str | Path) -> CaseStudy:
         organization=data["organization"],
         decision_question=data["decision_question"],
         published_facts=tuple(data["published_facts"]),
+        counterfactual=dict(data.get("counterfactual", {})),
         simulation_notice=data["simulation_notice"],
         forecast=ForecastConfig(**data["simulation"]["forecast"]),
         commercial_options=tuple(
-            _option_from_dict(option)
-            for option in data["simulation"]["commercial_options"]
+            _option_from_dict(option) for option in data["simulation"]["commercial_options"]
         ),
-        optimization_template=_option_from_dict(
-            data["simulation"]["optimization_template"]
-        ),
+        optimization_template=_option_from_dict(data["simulation"]["optimization_template"]),
         optimization=_optimization_from_dict(data["simulation"]["optimization"]),
         sources=tuple(data["sources"]),
     )

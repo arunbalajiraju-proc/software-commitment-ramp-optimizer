@@ -42,6 +42,25 @@
 - Risk-adjusted cost depends on the guided risk posture or programmatic risk weight and
   CVaR confidence level.
 - The overage guardrail is a policy choice and should be tailored to compliance needs.
+- Readiness statuses are user attestations. The open-source application does not inspect,
+  authenticate, approve, or retain the underlying evidence.
+- A hold or proceed outcome is only effective if the organization makes the gate part of
+  its sourcing and PO approval process.
+- Supplier-offer ranking assumes every entered offer is otherwise compliant and uses a
+  consistent licence metric.
+- The usage review is a point-in-time control. Its annualized unused-cost figure multiplies
+  the current monthly exposure by 12 and is not a demand forecast.
+- The retrospective Toronto calculation uses observed spend and unused cost. It is an
+  upper-bound counterfactual, not proof that usage-aligned pricing was available.
+
+## Deployment and data limitations
+
+- The public Streamlit application has no organization-specific authentication,
+  persistent encrypted decision store, approval workflow, or immutable audit log.
+- Confidential supplier pricing and user-level usage data should be processed only in an
+  appropriately controlled internal deployment.
+- Enterprise use requires integrations, security review, privacy assessment, retention
+  rules, and organization-specific policy and legal configuration.
 
 The tool is decision support for professional review. It is not legal, accounting,
 financial, or procurement advice and does not certify contract compliance.
